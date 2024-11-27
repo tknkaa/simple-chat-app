@@ -7,13 +7,17 @@ import { Server as SocketIOServer } from "socket.io";
 app.use(cors());
 app.use(express.json());
 
+interface Message {
+  username: string;
+  message: string;
+}
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("chat message", (msg: string) => {
+  socket.on("chat message", (msg: Message) => {
     io.emit("chat message", msg);
   });
 
@@ -21,4 +25,4 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 });
-app.listen(5000);
+server.listen(5000);

@@ -1,26 +1,59 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { useState, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const SOCKET_SERVER_URL = "http://localhost:5000";
+
+interface Message {
+  username: string;
+  message: string;
 }
 
-export default App;
+export default function App() {
+  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [username, setUsername] = useState<string>(
+    "User" + Math.floor(Math.random() * 1000),
+  );
+
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    socketRef.current = io(SOCKET_SERVER_URL);
+    socketRef.current.on("chat message", (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      const msg: Message = { username, message };
+      socketRef.current?.emit("chat message", msg);
+      setMessage("");
+    }
+  };
+
+  return (
+    <>
+      <h1>chat app</h1>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="type message"
+      />
+      <button onClick={sendMessage}>submit</button>
+      <h2>chat history</h2>
+      <ul>
+        {messages.map((msg, index) => (
+          <li key={index}>
+            <span>{msg.username}</span>
+            <span>{msg.message}</span>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
