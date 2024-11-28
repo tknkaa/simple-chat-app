@@ -3,6 +3,8 @@ const app = express();
 import cors from "cors";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
+import connectDB from "./db/connection";
+import MessageModel from "./models/messageModel";
 
 app.use(cors());
 app.use(express.json());
@@ -10,6 +12,7 @@ app.use(express.json());
 interface Message {
   username: string;
   message: string;
+  timestamp: Date;
 }
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
@@ -18,10 +21,20 @@ const io = new SocketIOServer(server, {
   },
 });
 
+connectDB();
+
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("chat message", (msg: Message) => {
+  MessageModel.find<Message>()
+    .sort({ timestamp: 1 })
+    .then((messages: Message[]) => {
+      socket.emit("load message", messages);
+    });
+
+  socket.on("chat message", async (msg: Message) => {
+    const newMessage = new MessageModel(msg);
+    await newMessage.save();
     io.emit("chat message", msg);
   });
 
