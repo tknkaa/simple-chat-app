@@ -23,7 +23,7 @@ export default function App() {
 
     socketRef.current.on("load message", (msgs: Message[]) => {
       setMessages(msgs);
-    })
+    });
 
     socketRef.current.on("chat message", (msg: Message) => {
       setMessages((prev) => [...prev, msg]);

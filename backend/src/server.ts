@@ -4,7 +4,7 @@ import cors from "cors";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 import connectDB from "./db/connection";
-import MessageModel from "./models/messageModel";
+import { Message as MessageModel } from "./models/messageModel";
 
 app.use(cors());
 app.use(express.json());
