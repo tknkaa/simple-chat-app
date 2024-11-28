@@ -6,3 +6,9 @@ dev-backend:
 
 format:
 	npx prettier . --write
+
+setup-frontend:
+	cd frontend && npm install
+
+setup-backend:
+	cd backend && npm install
