@@ -49,8 +49,9 @@ export default function App() {
       <ul>
         {messages.map((msg, index) => (
           <li key={index}>
-            <span>{msg.username}</span>
-            <span>{msg.message}</span>
+            <span>
+              {msg.username}: {msg.message}
+            </span>
           </li>
         ))}
       </ul>
