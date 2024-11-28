@@ -4,6 +4,12 @@ dev-frontend:
 dev-backend:
 	cd backend && npx tsc && node dist/server.js
 
+start-database:
+	sudo systemctl start mongod
+
+end-database:
+	sudo systemctl stop mongod
+
 format:
 	npx prettier . --write
 
