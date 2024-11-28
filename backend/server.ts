@@ -12,7 +12,11 @@ interface Message {
   message: string;
 }
 const server = http.createServer(app);
-const io = new SocketIOServer(server);
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
 io.on("connection", (socket) => {
   console.log("a user connected");
