@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
-const SOCKET_SERVER_URL = "http://localhost:5000";
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL;
 
 interface Message {
   username: string;
