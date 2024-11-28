@@ -6,6 +6,7 @@ const SOCKET_SERVER_URL = "http://localhost:5000";
 interface Message {
   username: string;
   message: string;
+  timestamp: Date;
 }
 
 export default function App() {
@@ -19,6 +20,11 @@ export default function App() {
 
   useEffect(() => {
     socketRef.current = io(SOCKET_SERVER_URL);
+
+    socketRef.current.on("load message", (msgs: Message[]) => {
+      setMessages(msgs);
+    })
+
     socketRef.current.on("chat message", (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
     });
@@ -29,7 +35,7 @@ export default function App() {
 
   const sendMessage = () => {
     if (message.trim()) {
-      const msg: Message = { username, message };
+      const msg: Message = { username, message, timestamp: new Date() };
       socketRef.current?.emit("chat message", msg);
       setMessage("");
     }
