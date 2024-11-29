@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { User } from "firebase/auth";
+import { db } from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 interface Message {
   username: string;
@@ -7,12 +10,31 @@ interface Message {
   timestamp: Date;
 }
 
-export default function Chat() {
+interface ChatProps {
+  user: User | null;
+}
+
+export default function Chat(props: ChatProps) {
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [username, setUsername] = useState<string>(
-    "User" + Math.floor(Math.random() * 1000),
-  );
+  const [username, setUsername] = useState<string>("");
+
+  const fetchUserName = async (uid: string) => {
+    const userDocRef = await doc(db, "users", uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (!userDocSnap.exists()) {
+      throw new Error("user doesn't exist.");
+    } else {
+      const userData = userDocSnap.data();
+      setUsername(userData.username);
+    }
+  };
+
+  if (props.user === null) {
+    throw new Error("user doesn't exist.");
+  } else {
+    fetchUserName(props.user.uid);
+  }
 
   const socketRef = useRef<Socket | null>(null);
 

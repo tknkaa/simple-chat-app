@@ -17,21 +17,25 @@ export default function SignUp(props: SignUpProps) {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    const newUser = userCredential.user;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const newUser = userCredential.user;
 
-    await setDoc(doc(db, "users", newUser.uid), {
-      username: username,
-      email: newUser.email,
-      createdAt: new Date(),
-    });
+      await setDoc(doc(db, "users", newUser.uid), {
+        username: username,
+        email: newUser.email,
+        createdAt: new Date(),
+      });
 
-    props.setUser(newUser);
-    navigate("/chat");
+      props.setUser(newUser);
+      navigate("/chat");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

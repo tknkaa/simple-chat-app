@@ -33,7 +33,7 @@ const App = () => {
             path="/signup"
             element={<SignUp user={user} setUser={setUser} />}
           />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat" element={<Chat user={user} />} />
         </Routes>
       </BrowserRouter>
     </>
