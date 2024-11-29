@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./config/firebase";
-import Chat from "./components/Chat";
-import SignUp from "./components/SignUp";
+import Chat from "./pages/Chat";
+import SignUp from "./pages/SignUp";
+import Start from "./pages/Start";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -19,11 +22,14 @@ const App = () => {
 
   return (
     <>
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <>{user !== null ? <Chat /> : <SignUp />} </>
-      )}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/chat" element={<Chat />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
