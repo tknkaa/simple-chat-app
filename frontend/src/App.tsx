@@ -26,7 +26,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Start loading={loading} user={user} />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/signup"
+            element={<SignUp user={user} setUser={setUser} />}
+          />
           <Route path="/chat" element={<Chat />} />
         </Routes>
       </BrowserRouter>
