@@ -5,10 +5,10 @@ dev-backend:
 	cd backend && npx tsc && node dist/server.js
 
 start-database:
-	sudo systemctl start mongod
+	docker-compose up -d
 
 end-database:
-	sudo systemctl stop mongod
+	docker-compose down
 
 format:
 	npx prettier . --write
