@@ -2,7 +2,7 @@ dev:
 	npm run dev
 
 start-database:
-	docker-compose up -d
+	docker run --name mongodb -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example mongo
 
 end-database:
 	docker-compose down
