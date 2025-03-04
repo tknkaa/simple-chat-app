@@ -11,5 +11,8 @@
   "description": "",
   "devDependencies": {
     "prettier": "^3.4.1"
+  },
+  "dependencies": {
+    "@tknkaa/gemmit": "^1.0.3"
   }
 }
