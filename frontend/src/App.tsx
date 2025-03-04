@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./config/firebase";
 import Chat from "./pages/Chat";
 import SignUp from "./pages/SignUp";
